@@ -29,6 +29,10 @@ client.connect((err) => {
     .db(`${process.env.DB_NAME}`)
     .collection("orders");
 
+  const adminsCollection = client
+    .db(`${process.env.DB_NAME}`)
+    .collection("admins");
+
   app.post("/addService", (req, res) => {
     const service = req.body;
     servicesCollection.insertOne(service).then((result) => {
@@ -73,6 +77,19 @@ client.connect((err) => {
     testimonialCollection.insertOne(review).then((result) => {
       res.send(result.insertedCount > 0);
       console.log("review added");
+    });
+  });
+
+  app.post("/makeAdmin", (req, res) => {
+    const admin = req.body;
+    adminsCollection.insertOne(admin).then((result) => {
+      res.send(result.insertedCount > 0);
+    });
+  });
+
+  app.get("/admins", (req, res) => {
+    adminsCollection.find({}).toArray((err, admins) => {
+      res.send(admins);
     });
   });
 
