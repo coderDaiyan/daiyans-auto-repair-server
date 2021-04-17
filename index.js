@@ -4,6 +4,7 @@ const port = 5000;
 const cors = require("cors");
 require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
+const ObjectId = require("mongodb").ObjectId;
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.7ppa7.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -32,6 +33,10 @@ client.connect((err) => {
   const adminsCollection = client
     .db(`${process.env.DB_NAME}`)
     .collection("admins");
+
+  const slidersCollection = client
+    .db(`${process.env.DB_NAME}`)
+    .collection("sliders");
 
   app.post("/addService", (req, res) => {
     const service = req.body;
@@ -72,6 +77,12 @@ client.connect((err) => {
     });
   });
 
+  app.get("/allOrders", (req, res) => {
+    ordersCollection.find({}).toArray((err, allOrders) => {
+      res.send(allOrders);
+    });
+  });
+
   app.post("/addReview", (req, res) => {
     const review = req.body;
     testimonialCollection.insertOne(review).then((result) => {
@@ -90,6 +101,46 @@ client.connect((err) => {
   app.get("/admins", (req, res) => {
     adminsCollection.find({}).toArray((err, admins) => {
       res.send(admins);
+    });
+  });
+
+  app.post("/addService", (req, res) => {
+    const service = req.body;
+    servicesCollection.insertOne(service).then((result) => {
+      res.send(result.insertedCount > 0);
+    });
+  });
+
+  app.get("/specificOrder/:id", (req, res) => {
+    ordersCollection
+      .find({ _id: ObjectId(req.params.id) })
+      .toArray((err, order) => {
+        res.send(order);
+      });
+  });
+
+  app.patch("/updateStatus", (req, res) => {
+    const { id, status } = req.body;
+    ordersCollection
+      .updateOne(
+        { _id: ObjectId(id) },
+        {
+          $set: { status: status },
+        }
+      )
+      .then((result) => res.send(result.modifiedCount > 0));
+  });
+
+  app.post("/addSliders", (req, res) => {
+    const sliders = req.body;
+    slidersCollection.insertMany(sliders).then((result) => {
+      res.send(result.insertedCount > 0);
+    });
+  });
+
+  app.get("/sliders", (req, res) => {
+    slidersCollection.find({}).toArray((err, sliderImgs) => {
+      res.send(sliderImgs);
     });
   });
 
