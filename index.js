@@ -111,6 +111,12 @@ client.connect((err) => {
     });
   });
 
+  app.get("/services", (req, res) => {
+    servicesCollection.find({}).toArray((err, services) => {
+      res.send(services);
+    });
+  });
+
   app.get("/specificOrder/:id", (req, res) => {
     ordersCollection
       .find({ _id: ObjectId(req.params.id) })
@@ -131,17 +137,13 @@ client.connect((err) => {
       .then((result) => res.send(result.modifiedCount > 0));
   });
 
-  app.post("/addSliders", (req, res) => {
-    const sliders = req.body;
-    slidersCollection.insertMany(sliders).then((result) => {
-      res.send(result.insertedCount > 0);
-    });
-  });
-
-  app.get("/sliders", (req, res) => {
-    slidersCollection.find({}).toArray((err, sliderImgs) => {
-      res.send(sliderImgs);
-    });
+  app.delete("/delete/:id", (req, res) => {
+    servicesCollection
+      .deleteOne({ _id: ObjectId(req.params.id) })
+      .then((result) => {
+        res.send(result.deletedCount > 0);
+        console.log("deleted");
+      });
   });
 
   console.log("db connected");
