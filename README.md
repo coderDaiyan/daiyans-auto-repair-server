@@ -5,7 +5,6 @@
 **Client Side Code** Below.
 
 <br>
-<br>
 
 ## How to Start the Server
 
@@ -23,4 +22,4 @@ After the **node_modules** folder is created you should type
 
 ## Client Side Repo Link
 
-[Client Side Repo](https://github.com/Porgramming-Hero-web-course/complete-website-client-coderDaiyan)
+[Client Side Repo](https://github.com/coderDaiyan/daiyans-auto-repair-client)
