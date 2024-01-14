@@ -4,8 +4,8 @@ const router = require("express").Router();
 
 router.get("/services", async (req, res) => {
   try {
+    // console.log("boo");
     const services = await ServiceModel.find({});
-
     res.status(200).send(services);
   } catch (e) {
     res.status(400).json({ errror: e.message });

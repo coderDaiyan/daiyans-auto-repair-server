@@ -3,7 +3,7 @@ const TestimonialModel = require("../models/testimonial.model");
 
 const router = require("express").Router();
 
-router.get("/addTestimonial", async (req, res) => {
+router.get("/testimonials", async (req, res) => {
   try {
     const result = await TestimonialModel.find({});
 

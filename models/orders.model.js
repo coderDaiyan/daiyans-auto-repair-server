@@ -42,10 +42,8 @@ const OrderSchema = mongoose.Schema({
     required: true,
   },
   status: {
-    enum: {
-      values: ["Rejected", "Done", "Pending"],
-      message: "Status can't be {VALUE} !",
-    },
+    type: String,
+    required: true,
   },
 });
 
